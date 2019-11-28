@@ -28,10 +28,12 @@ public class ServerRequest {
     HashMap<String,HashMap<String,String>> mymap1;
     public boolean isCompleted=false;
 
+
+    //eita construcktor, url+ context dara server e request korar jonno.
+
     public ServerRequest(String URL, Context context){
         Request request= new Request.Builder().url(URL).build();
         OkHttpClient okHttpClient=new OkHttpClient.Builder().build();
-
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -40,8 +42,11 @@ public class ServerRequest {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
+                // server teke data receive kore ServerResponse variable e save koa hocce
                 ServerResponse=response.body().string();
                 Log.e("server response",ServerResponse);
+
+                //server response teke data gula mymap varible e save kora hocce 'key+ value' diye
                 mymap=new HashMap<>();
 
 
@@ -68,11 +73,14 @@ public class ServerRequest {
 //                    e.printStackTrace();
 //                }
 
+
+                // varible declare kora hocce
                 JSONObject jsonObject;
                 JSONArray jsonArray;
                 mymap1=new HashMap<>();
                 try {
 
+                    //mymap e (Hashmap) sob data raka hocce kew and value dara
                     jsonObject = new JSONObject(ServerResponse);
                     Log.e("json object", jsonObject.toString());
                     mymap.put("page",jsonObject.getString("page"));
@@ -81,12 +89,15 @@ public class ServerRequest {
                     mymap.put("total_pages",jsonObject.getString("total_pages"));
                     mymap.put("data",jsonObject.getString("data"));
 
+                    //printing
                     Log.e("page",mymap.get("page"));
                     Log.e("per_page",mymap.get("per_page"));
                     Log.e("total",mymap.get("total"));
                     Log.e("total_pages",mymap.get("total_pages"));
                     Log.e("data",mymap.get("data"));
 
+
+                    //data array teke value gula object e porinoto kora hocce
                     jsonArray=jsonObject.getJSONArray("data");
 
                     for(int i=0;i<jsonArray.length();i++){
@@ -108,6 +119,7 @@ public class ServerRequest {
 
 
 
+                //main activity layout e print er jonno ei method use kora hoyese
                 ((Activity)context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
